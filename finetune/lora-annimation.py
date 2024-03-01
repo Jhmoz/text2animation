@@ -4,13 +4,13 @@ import json
 import torch
 from peft import LoraConfig, TaskType, get_peft_model
 
-output_dir = "./output"
+output_dir = "../output"
 instruction = "假设你是一个动画制作项目的脚本提取员，需要你将给定的中文句子中所有人物的动作都提取出来，形成可渲染的动画脚本以供角色动画制作。“在”、“带”作为专门的动作需要被表现出来。动画脚本一共包括五个要素：场景，动作，动作角色，动作接受者以及动画关联者。\n所给中文句子："
 model_name_or_path = "/home/zyy/models/chatglm3-6b"
 
 
 def read_corpus():
-    return json.load(open("./data/corpurs_for_train.json", "r", encoding="utf-8"))
+    return json.load(open("./data/corpurs_for_train_v2.json", "r", encoding="utf-8"))
 
 
 def prepare_dataset(data: dict):
@@ -99,7 +99,7 @@ data_collator = DataCollatorForSeq2Seq(
 )
 
 training_args = TrainingArguments(
-    output_dir="./output",
+    output_dir="../output",
     per_device_train_batch_size=3,
     gradient_accumulation_steps=8,
     logging_steps=5,
@@ -116,12 +116,12 @@ trainer = Trainer(
 )
 
 trainer.train()
-trainer.save_model("./output/lora-weight")
+trainer.save_model("../output/lora-weight-v3")
 
 merge_model = model.merge_and_unload()
 test="假设你是一个动画制作项目的脚本提取员，需要你将给定的中文句子中所有人物的动作都提取出来，形成可渲染的动画脚本以供角色动画制作。“在”、“带”作为专门的动作需要被表现出来。动画脚本一共包括五个要素：场景，动作，动作角色，动作接受者以及动画关联者。\n所给中文句子：爸爸妈妈带着小强一起去了医院里面找兔子医生看病\n解析结果："
 print(merge_model.chat(tokenizer,test)[0])
 
 merge_model = model.merge_and_unload()
-merge_model.save_pretrained("./output/model")
+merge_model.save_pretrained("../output/model-v3")
 

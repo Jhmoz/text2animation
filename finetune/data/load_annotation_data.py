@@ -34,8 +34,8 @@ def get_all_annotation(annotion_dir):
     return annatation
 
 if __name__=="__main__":
-    rephrase_sents=get_all_rephrases("./rephrase")
-    annotation=get_all_annotation("./DataSet_TenExample")
+    rephrase_sents=get_all_rephrases("./rephrase_v2")
+    annotation=get_all_annotation("./DataSet_TenExample_v2")
     corpurs_for_train = []
     for sent_id in annotation:
         if sent_id in rephrase_sents:
@@ -51,5 +51,5 @@ if __name__=="__main__":
                 "output": annotation[sent_id]["label"]
             })
 
-    with open("./corpurs_for_train.json", "w", encoding="utf-8",errors="ignore") as f:
+    with open("./corpurs_for_train_v2.json", "w", encoding="utf-8",errors="ignore") as f:
         json.dump(corpurs_for_train,f)
